@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Cart;
 use App\Entity\CartItem;
+use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,7 +17,6 @@ class CartItemRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CartItem::class);
     }
-
     //    /**
     //     * @return CartItem[] Returns an array of CartItem objects
     //     */

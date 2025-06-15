@@ -17,16 +17,15 @@ class Cart
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\OneToOne(cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     /**
      * @var Collection<int, CartItem>
      */
-    #[Groups(['short'])]
-    #[ORM\ManyToMany(targetEntity: CartItem::class)]
+    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'cart', orphanRemoval: true)]
     private Collection $items;
-
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
 
     public function __construct()
     {
@@ -36,6 +35,18 @@ class Cart
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     /**
@@ -50,6 +61,7 @@ class Cart
     {
         if (!$this->items->contains($item)) {
             $this->items->add($item);
+            $item->setCart($this);
         }
 
         return $this;
@@ -57,19 +69,12 @@ class Cart
 
     public function removeItem(CartItem $item): static
     {
-        $this->items->removeElement($item);
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): static
-    {
-        $this->user = $user;
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getCart() === $this) {
+                $item->setCart(null);
+            }
+        }
 
         return $this;
     }
