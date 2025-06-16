@@ -12,6 +12,7 @@ class CartItemDtoFactory
             $cartItem->getId(),
             $cartItem->getAmount(),
             $cartItem->getProduct()->getId(),
+            $cartItem->getProduct()->getName(),
         );
     }
 }

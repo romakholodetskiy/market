@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Dto\OrderCreateDto;
+use App\Entity\Order;
+use App\Entity\OrderItem;
 use App\Entity\User;
 use App\ResponseDto\OrderDtoFactory;
 use App\Service\OrderService;
@@ -32,6 +34,18 @@ final class OrderController extends AbstractController
        $order =  $orderService->show($orderId);
        return $this->json($orderDtoFactory->create($order), Response::HTTP_OK);
     }
+    #[Route('/orders', name: 'show_all_order', methods: ['GET'])]
+    public function showAll(OrderService $orderService, OrderDtoFactory $orderDtoFactory): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $orders = $orderService->showAll($user->getId());
+        $result = array_map(function (Order $order) use ($orderDtoFactory){
+            return $orderDtoFactory->create($order);
+        },$orders);
+        return $this->json($result, Response::HTTP_OK);
+    }
+
     #[Route('/orders/{orderId}', name: 'delete_order', methods: ['DELETE'])]
     public function delete(int $orderId, OrderService $orderService,): JsonResponse
     {

@@ -10,6 +10,7 @@ readonly class CartItemDto implements \JsonSerializable
         public int $id,
         public int $amount,
         public int $productId,
+        public string $productName,
     )
     {
     }
@@ -20,6 +21,7 @@ readonly class CartItemDto implements \JsonSerializable
             'id' => $this->id,
             'amount' => $this->amount,
             'productId' => $this->productId,
+            'productName' => $this->productName,
             ];
     }
 }

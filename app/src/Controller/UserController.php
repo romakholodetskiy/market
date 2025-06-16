@@ -24,7 +24,7 @@ final class UserController extends AbstractController
         return $this->json(['id' => $id]);
     }
 
-    #[Route('/users/token', name: 'login', methods: ['GET'])]
+    #[Route('/users/token', name: 'login', methods: ['POST'])]
     public function login(
         #[MapRequestPayload] UserTokenDto $userTokenDto,
         UserService $userService,

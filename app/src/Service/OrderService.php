@@ -74,4 +74,8 @@ class OrderService
         $order->setStatus(OrderStatus::CANCELLED);
         $this->entityManager->flush();
     }
+    public function showAll(int $userId){
+        $orders = $this->orderRepository->findBy(['user' => $userId]);
+        return $orders;
+    }
 }
