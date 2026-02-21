@@ -53,26 +53,32 @@ class CartService
         $this->entityManager->flush();
         return $cartItem->getId();
     }
-    public function updateItem(int $id, CartItemUpdateDto $cartItemUpdateDto){
+
+    public function updateItem(int $id, CartItemUpdateDto $cartItemUpdateDto)
+    {
         $cartItem = $this->cartItemRepository->find($id);
-        if(!$cartItem instanceof CartItem){
+        if (!$cartItem instanceof CartItem) {
             throw new NotFoundHttpException('Cart item does not exists');
         }
         $cartItem->setAmount($cartItemUpdateDto->amount);
         $this->entityManager->flush();
         return $cartItem;
     }
-    public function deleteItem(int $id){
+
+    public function deleteItem(int $id)
+    {
         $cartItem = $this->cartItemRepository->find($id);
-        if(!$cartItem instanceof CartItem){
-            return ;
+        if (!$cartItem instanceof CartItem) {
+            return;
         }
         $this->entityManager->remove($cartItem);
         $this->entityManager->flush();
     }
-    public function show($userId){
+
+    public function show($userId)
+    {
         $cart = $this->cartRepository->findOneBy(['user' => $userId]);
-        if(!$cart instanceof Cart){
+        if (!$cart instanceof Cart) {
             return null;
         }
         return $cart;

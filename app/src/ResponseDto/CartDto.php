@@ -11,16 +11,15 @@ class CartDto implements \JsonSerializable
         public int $id,
         public array $items,
         public string $total,
-    )
-    {
+    ) {
     }
 
     public function jsonSerialize(): array
     {
         return [
-          'id' => $this->id,
-          'items' => $this->items,
-          'total' => $this->total,
+            'id' => $this->id,
+            'items' => $this->items,
+            'total' => $this->total,
         ];
     }
 }

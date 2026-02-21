@@ -11,12 +11,12 @@ class OrderDtoFactory
     public function __construct(
         private OrderRepository $orderRepository,
         private OrderItemDtoFactory $orderItemDtoFactory,
-    )
-    {
+    ) {
     }
+
     public function create(Order $order)
     {
-        $items = $order->getItems()->map(function (OrderItem $orderItem){
+        $items = $order->getItems()->map(function (OrderItem $orderItem) {
             return $this->orderItemDtoFactory->create($orderItem);
         });
         return new OrderDto(

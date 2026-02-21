@@ -22,10 +22,11 @@ class OrderService
         private OrderRepository $orderRepository,
     ) {
     }
+
     public function createOrderFromCart(int $userId, OrderCreateDto $orderCreateDto): int
     {
         $cart = $this->cartRepository->findOneBy(['user' => $userId]);
-        if(!$cart instanceof Cart){
+        if (!$cart instanceof Cart) {
             throw new NotFoundHttpException('cart does not exists');
         }
         $order = null;
@@ -33,7 +34,7 @@ class OrderService
         /**
          * @throws OptimisticLockException
          * @throws ORMException
-         */ function () use($cart, $orderCreateDto, &$order){
+         */ function () use ($cart, $orderCreateDto, &$order) {
             $order = new Order();
             $this->entityManager->persist($order);
             $order->setUser($cart->getUser());
@@ -42,7 +43,7 @@ class OrderService
             $order->setSecondName($orderCreateDto->secondName);
             $order->setPhoneNumber($orderCreateDto->phoneNumber);
             $order->setAddress($orderCreateDto->address);
-            foreach ($cart->getItems() as $item){
+            foreach ($cart->getItems() as $item) {
                 $orderItem = new OrderItem();
                 $this->entityManager->persist($orderItem);
                 $orderItem->setProduct($item->getProduct());
@@ -52,29 +53,35 @@ class OrderService
             }
             $this->entityManager->remove($cart);
             $this->entityManager->flush();
-        });
-        if($order === null){
+        }
+        );
+        if ($order === null) {
             throw new \Exception('something went wrong');
         }
         return $order->getId();
     }
 
-    public function show(int $orderId){
+    public function show(int $orderId)
+    {
         $order = $this->orderRepository->find($orderId);
-        if(!$order instanceof Order){
+        if (!$order instanceof Order) {
             throw new NotFoundHttpException('order does not exist');
         }
         return $order;
     }
-    public function cancel($orderId){
+
+    public function cancel($orderId)
+    {
         $order = $this->orderRepository->find($orderId);
-        if(!$order instanceof Order){
+        if (!$order instanceof Order) {
             throw new NotFoundHttpException('order does not exists');
         }
         $order->setStatus(OrderStatus::CANCELLED);
         $this->entityManager->flush();
     }
-    public function showAll(int $userId){
+
+    public function showAll(int $userId)
+    {
         $orders = $this->orderRepository->findBy(['user' => $userId]);
         return $orders;
     }

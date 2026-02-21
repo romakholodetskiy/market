@@ -2,8 +2,8 @@
 
 namespace App\Enum;
 
-class ProductStatus
+enum ProductStatus: int
 {
-    public const int ACTIVE = 1;
-    public const int DISCONTINUED = 2;
+    case ACTIVE = 1;
+    case DISCONTINUED = 2;
 }

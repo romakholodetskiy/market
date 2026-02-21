@@ -14,8 +14,7 @@ class OrderDto implements \JsonSerializable
         public string $phoneNumber,
         public array $items,
         public string $totalPrice,
-    )
-    {
+    ) {
     }
 
     public function jsonSerialize(): array

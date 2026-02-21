@@ -20,7 +20,7 @@ readonly class UserService
     ) {
     }
 
-    public function register(UserRegisterDto $userRegisterDto) : int
+    public function register(UserRegisterDto $userRegisterDto): int
     {
         if ($this->userRepository->findOneBy(['email' => $userRegisterDto->email]) instanceof User) {
             throw new \Exception('email already exist');
@@ -36,13 +36,13 @@ readonly class UserService
         return $user->getId();
     }
 
-    public function login(UserTokenDto $userTokenDto) : string
+    public function login(UserTokenDto $userTokenDto): string
     {
         $user = $this->userRepository->findOneBy(['email' => $userTokenDto->email]);
-        if(!$user instanceof User){
+        if (!$user instanceof User) {
             throw new \Exception('invalid email or password');
         }
-        if(!$this->hasher->isPasswordValid($user, $userTokenDto->password)){
+        if (!$this->hasher->isPasswordValid($user, $userTokenDto->password)) {
             throw new \Exception('invalid email or password');
         }
         return $this->JWTTokenManager->create($user);

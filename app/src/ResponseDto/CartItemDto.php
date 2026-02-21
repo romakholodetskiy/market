@@ -11,8 +11,7 @@ readonly class CartItemDto implements \JsonSerializable
         public int $amount,
         public int $productId,
         public string $productName,
-    )
-    {
+    ) {
     }
 
     public function jsonSerialize(): array
@@ -22,6 +21,6 @@ readonly class CartItemDto implements \JsonSerializable
             'amount' => $this->amount,
             'productId' => $this->productId,
             'productName' => $this->productName,
-            ];
+        ];
     }
 }

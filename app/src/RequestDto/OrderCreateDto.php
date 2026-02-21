@@ -18,7 +18,6 @@ class OrderCreateDto
 
         #[Assert\NotBlank]
         public string $address,
-    )
-    {
+    ) {
     }
 }

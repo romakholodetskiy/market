@@ -6,7 +6,7 @@ use App\Entity\CartItem;
 
 class CartItemDtoFactory
 {
-    public function create(CartItem $cartItem) : CartItemDto
+    public function create(CartItem $cartItem): CartItemDto
     {
         return new CartItemDto(
             $cartItem->getId(),

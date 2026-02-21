@@ -49,18 +49,21 @@ class ProductService
         }
         return $product;
     }
-    public function delete(int $id) : void
+
+    public function delete(int $id): void
     {
         $product = $this->productRepository->find($id);
         if (!$product) {
-            return ;
+            return;
         }
         $this->em->remove($product);
         $this->em->flush();
     }
-    public function change(int $id, ProductChangeDto $productChangeDto){
+
+    public function change(int $id, ProductChangeDto $productChangeDto)
+    {
         $product = $this->productRepository->find($id);
-        if(!$product instanceof Product){
+        if (!$product instanceof Product) {
             throw new NotFoundHttpException('product does not exists');
         }
         $slug = $this->slugger->slug($productChangeDto->name);

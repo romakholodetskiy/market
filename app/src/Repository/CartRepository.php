@@ -15,7 +15,8 @@ class CartRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Cart::class);
     }
-    public function totalPrice(int $cartId) : string
+
+    public function totalPrice(int $cartId): string
     {
         return $this->createQueryBuilder('c')
             ->select('SUM(ci.amount * p.price) AS total')

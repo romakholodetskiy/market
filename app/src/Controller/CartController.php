@@ -42,6 +42,7 @@ final class CartController extends AbstractController
         $cartService->deleteItem($id);
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
+
     #[Route('/cart', name: 'cart_get', methods: ['GET'])]
     public function show(CartService $cartService, CartDtoFactory $cartDtoFactory): JsonResponse
     {

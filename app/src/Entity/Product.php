@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Enum\ProductStatus;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -26,6 +28,21 @@ class Product
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
+
+    #[ORM\Column(type: Types::INTEGER, enumType: ProductStatus::class)]
+    private ProductStatus $status;
+
+    /**
+     * @var Collection<int, WarehouseStock>
+     */
+    #[ORM\OneToMany(targetEntity: WarehouseStock::class, mappedBy: 'product', orphanRemoval: true)]
+    private Collection $warehouseStocks;
+
+
+    public function __construct()
+    {
+        $this->warehouseStocks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +93,48 @@ class Product
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getStatus(): ProductStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(ProductStatus $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WarehouseStock>
+     */
+    public function getWarehouseStocks(): Collection
+    {
+        return $this->warehouseStocks;
+    }
+
+    public function addWarehouseStock(WarehouseStock $warehouseStock): static
+    {
+        if (!$this->warehouseStocks->contains($warehouseStock)) {
+            $this->warehouseStocks->add($warehouseStock);
+            $warehouseStock->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWarehouseStock(WarehouseStock $warehouseStock): static
+    {
+        if ($this->warehouseStocks->removeElement($warehouseStock)) {
+            // set the owning side to null (unless already changed)
+            if ($warehouseStock->getProduct() === $this) {
+                $warehouseStock->setProduct(null);
+            }
+        }
 
         return $this;
     }

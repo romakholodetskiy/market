@@ -15,7 +15,9 @@ class OrderRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Order::class);
     }
-    public function totalPrice(int $orderId){
+
+    public function totalPrice(int $orderId)
+    {
         return $this->createQueryBuilder('o')
             ->select('SUM(oi.amount * oi.price) AS total')
             ->join('o.items', 'oi')
