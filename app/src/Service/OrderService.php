@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Dto\OrderCreateDto;
+use App\RequestDto\OrderCreateDto;
 use App\Entity\Cart;
 use App\Entity\Order;
 use App\Entity\OrderItem;

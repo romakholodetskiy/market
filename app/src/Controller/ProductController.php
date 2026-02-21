@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Dto\ProductChangeDto;
-use App\Dto\ProductCreateDto;
+use App\RequestDto\ProductChangeDto;
+use App\RequestDto\ProductCreateDto;
 use App\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

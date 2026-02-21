@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Dto\UserRegisterDto;
-use App\Dto\UserTokenDto;
+use App\RequestDto\UserRegisterDto;
+use App\RequestDto\UserTokenDto;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Dto\ProductChangeDto;
-use App\Dto\ProductCreateDto;
+use App\RequestDto\ProductChangeDto;
+use App\RequestDto\ProductCreateDto;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;

@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Dto\UserRegisterDto;
-use App\Dto\UserTokenDto;
+use App\RequestDto\UserRegisterDto;
+use App\RequestDto\UserTokenDto;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;

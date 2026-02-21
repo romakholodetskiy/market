@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Dto\OrderCreateDto;
+use App\RequestDto\OrderCreateDto;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\User;

@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Dto\CartItemAddDto;
-use App\Dto\CartItemUpdateDto;
+use App\RequestDto\CartItemAddDto;
+use App\RequestDto\CartItemUpdateDto;
 use App\Entity\User;
 use App\ResponseDto\CartDtoFactory;
 use App\ResponseDto\CartItemDtoFactory;
@@ -47,7 +47,10 @@ final class CartController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        return $this->json($cartDtoFactory->create($cartService->show($user->getId())), Response::HTTP_OK);
-
+        $cart = $cartService->show($user->getId());
+        if ($cart === null) {
+            return $this->json(['id' => null, 'items' => [], 'total' => 0], Response::HTTP_OK);
+        }
+        return $this->json($cartDtoFactory->create($cart), Response::HTTP_OK);
     }
 }

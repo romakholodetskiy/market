@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Dto\CartItemAddDto;
-use App\Dto\CartItemUpdateDto;
+use App\RequestDto\CartItemAddDto;
+use App\RequestDto\CartItemUpdateDto;
 use App\Entity\Cart;
 use App\Entity\CartItem;
 use App\Entity\Product;
