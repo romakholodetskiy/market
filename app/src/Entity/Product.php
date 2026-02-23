@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -35,6 +36,7 @@ class Product
     /**
      * @var Collection<int, WarehouseStock>
      */
+    #[Ignore]
     #[ORM\OneToMany(targetEntity: WarehouseStock::class, mappedBy: 'product', orphanRemoval: true)]
     private Collection $warehouseStocks;
 
@@ -137,5 +139,11 @@ class Product
         }
 
         return $this;
+    }
+    public function getQuantity(): int{
+        $stocks = $this->getWarehouseStocks()->toArray();
+        return array_reduce($stocks, function($totalQuantity, $stock){
+            return $totalQuantity + $stock->getQuantity();
+        });
     }
 }

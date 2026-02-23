@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Entity\CartItem;
+use App\Entity\WarehouseStock;
 use App\RequestDto\OrderCreateDto;
 use App\Entity\Cart;
 use App\Entity\Order;
@@ -12,6 +14,7 @@ use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
+use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class OrderService
@@ -44,6 +47,19 @@ class OrderService
             $order->setPhoneNumber($orderCreateDto->phoneNumber);
             $order->setAddress($orderCreateDto->address);
             foreach ($cart->getItems() as $item) {
+                if($item->getProduct()->getQuantity() <= $item->getAmount()){
+                    throw new RuntimeException('cart item does not exists');
+                }
+                $product = $item->getProduct();
+                $warehouseStocks = $product->getWarehouseStocks();
+                $stocks = $warehouseStocks->toArray();
+                usort($stocks, function (WarehouseStock $a, WarehouseStock $b) use ($orderCreateDto) {
+                    $aPriority = $a->getWarehouse()->getCity()->getId() === $orderCreateDto->cityId ? -1 : 1;
+                    $bPriority = $b->getWarehouse()->getCity()->getId() === $orderCreateDto->cityId ? -1 : 1;
+                    return $aPriority <=> $bPriority;
+                });
+                $this->reduceProductQuantity($item, $stocks);
+                $this->entityManager->persist($product);
                 $orderItem = new OrderItem();
                 $this->entityManager->persist($orderItem);
                 $orderItem->setProduct($item->getProduct());
@@ -84,5 +100,17 @@ class OrderService
     {
         $orders = $this->orderRepository->findBy(['user' => $userId]);
         return $orders;
+    }
+    private function reduceProductQuantity(CartItem $cartItem, array $wareHousesStocks) : void
+    {
+        $remaining = $cartItem->getAmount();
+        foreach ($wareHousesStocks as $wareHouseStock){
+            if($remaining <= 0 ){
+                break;
+            };
+            $quantity = min($wareHouseStock->getQuantity(), $remaining);
+            $wareHouseStock->setQuantity($wareHouseStock->getQuantity() - $quantity);
+            $remaining -= $quantity;
+        }
     }
 }

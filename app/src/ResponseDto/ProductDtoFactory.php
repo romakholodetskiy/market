@@ -8,10 +8,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ProductDtoFactory
 {
     function create(Product $product): ProductDto{
-       $stocks = $product->getWarehouseStocks()->toArray();
-       $totalQuantity = array_reduce($stocks, function($totalQuantity, $stock){
-           return $totalQuantity + $stock->getQuantity();
-       });
        return new ProductDto(
            $product->getId(),
            $product->getName(),
@@ -19,7 +15,7 @@ class ProductDtoFactory
            $product->getPrice(),
            $product->getDescription(),
            $product->getStatus(),
-           $totalQuantity,
+           $product->getQuantity(),
        );
     }
 

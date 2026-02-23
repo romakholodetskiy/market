@@ -6,6 +6,7 @@ use App\Repository\WarehouseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: WarehouseRepository::class)]
 class Warehouse
@@ -25,6 +26,7 @@ class Warehouse
     /**
      * @var Collection<int, WarehouseStock>
      */
+    #[Ignore]
     #[ORM\OneToMany(targetEntity: WarehouseStock::class, mappedBy: 'warehouse', orphanRemoval: true)]
     private Collection $warehouseStocks;
 
